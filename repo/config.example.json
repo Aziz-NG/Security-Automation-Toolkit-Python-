@@ -1,0 +1,5 @@
+{
+  "tenant_id": "your-directory-tenant-id-here",
+  "client_id": "your-application-client-id-here",
+  "client_secret": "your-client-secret-value-here"
+}
