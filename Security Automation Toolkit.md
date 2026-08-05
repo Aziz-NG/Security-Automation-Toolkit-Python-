@@ -72,7 +72,7 @@ Admin consent must be granted for all four in the Entra ID app registration befo
 pip install requests msal
 ```
 
-Each script expects a `config.json` (not committed) with your tenant ID, app registration client ID, and client secret — see `config.example.json` for the expected format.
+Each script expects a `config.json` (not committed) with your tenant ID, app registration client ID, and client secret — see [config.example.json](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/config.example.json) for the expected format.
 
 ---
 
