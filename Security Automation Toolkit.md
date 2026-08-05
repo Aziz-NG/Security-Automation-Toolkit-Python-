@@ -16,20 +16,22 @@ Most of my other projects use Azure-native tools (Sentinel, Logic Apps, Purview)
 
 ## 🛠️ Scripts
 
-### 1. `mfa_stale_role_audit.py` ✅ Built
+### 1. [mfa_stale_role_audit.py](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/mfa_stale_role_audit.py) ✅ Built
 Authenticates to Microsoft Graph via an Entra ID app registration (client credentials flow) and runs two checks:
 
 - **Accounts without MFA registered** — checks each user's registered authentication methods directly; flags any account with only a password and no additional factor.
 - **Standing (permanent) privileged role assignments** — lists every account holding a directory role assignment on a standing basis, rather than through time-bound activation.
 
-Both findings are written to `audit_report.csv`.
+Both findings are written to [audit_report.csv](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/audit_report.csv).
 
 **Known limitation, documented honestly:** the original plan was to flag privileged roles *unused* for 90+ days, using PIM's activation history. That data lives behind Microsoft Graph endpoints (`roleAssignmentScheduleInstances`, and the MFA registration *report* endpoint) that both require **Entra ID P2 or Governance licensing** — this tenant doesn't have it, and the script correctly surfaces that via Graph's own error messages rather than failing silently. The script was adjusted to flag **standing/permanent assignments instead of usage staleness** — arguably still a legitimate finding on its own, since permanent privileged access is exactly the anti-pattern PIM's just-in-time model exists to prevent, but it's a narrower check than originally scoped, and worth being upfront about if asked.
 
 **Security benefit:** surfaces exactly the kind of access hygiene gaps that show up in real audits — accounts without MFA, and privileged access held on a standing basis rather than activated only when needed.
 
-### 2. `ca_policy_export.py` ✅ Built
+### 2. [ca_policy_export.py](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/ca_policy_export.py) ✅ Built
 Authenticates to Microsoft Graph and exports all Conditional Access policies into a readable CSV report, rather than reviewing them one by one in the portal. For each policy, captures the display name, enabled/disabled state, required grant controls (e.g., MFA, block), and included users.
+
+[ca_policy_report.csv](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/ca_policy_report.csv)
 
 **Note:** some policies target access entirely through role assignment (`includeRoles`) rather than named users or groups — for those, the "Included Users" field will legitimately be blank. This isn't missing data; it reflects how the policy is actually scoped. A future enhancement would add a separate "Included Roles" column to capture this explicitly.
 
