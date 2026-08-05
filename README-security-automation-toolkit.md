@@ -81,4 +81,3 @@ Each script expects a `config.json` (not committed) with your tenant ID, app reg
 - Applying the same governance mindset from my IAM/SIEM projects, just via code instead of Azure-native automation
 
 ---
-*Author: [Your name] — CISSP, CCSP, Security+. Part of a broader Azure Security portfolio: [link to other repos].*
