@@ -1,0 +1,5 @@
+Policy Name,State,Required Controls,Included Users
+Require multifactor authentication for admins,enabled,mfa,
+Block legacy authentication,enabled,block,All
+Require multifactor authentication for all users,enabled,mfa,All
+Require multifactor authentication for Azure management,enabled,mfa,All
