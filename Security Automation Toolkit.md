@@ -55,7 +55,7 @@ All scripts authenticate to Microsoft Graph / Azure using an app registration wi
 - `AuditLog.Read.All` — for `mfa_stale_role_audit.py`; added after an initial `403` error revealed this was required for the MFA authentication-methods endpoint, beyond what `UserAuthenticationMethod.Read.All` alone covers
 - `Policy.Read.All` — for `ca_policy_export.py`
 
-Admin consent must be granted for all four in the Entra ID app registration before the script will run successfully.
+Admin consent must be granted for all five in the Entra ID app registration before the script will run successfully.
 
 ## ⚙️ Setup
 
