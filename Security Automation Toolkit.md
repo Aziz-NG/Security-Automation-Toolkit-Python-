@@ -59,9 +59,9 @@ Admin consent must be granted for all four in the Entra ID app registration befo
 
 ## ⚙️ Setup
 
-1. Create an app registration in Entra ID, add the four permissions above, and grant admin consent.
+1. Create an app registration in Entra ID, add the five permissions above, and grant admin consent. >> See example here:[API permissions](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/Security%20Automation%20Toolkit%20-%20API%20Permissions.PNG)
 2. Generate a client secret and copy its value immediately (shown only once).
-3. Copy `config.example.json` to a new file named `config.json` in the project root, and fill in your real tenant ID, client ID, and client secret.
+3. Copy [config.example.json](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/config.example.json) to a new file named `config.json` in the project root, and fill in your real tenant ID, client ID, and client secret.
 4. `config.json` is listed in `.gitignore` and will never be committed to this repo — it should only ever exist locally.
 
 ---
