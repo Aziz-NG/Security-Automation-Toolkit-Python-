@@ -38,7 +38,7 @@ Authenticates to Microsoft Graph and exports all Conditional Access policies int
 **Security benefit:** makes periodic CA policy review actually practical — this is the kind of governance task that gets skipped when it requires manually opening a dozen policies in a UI.
 
 ### 3. `sentinel-incident-summary.py` ⏳ Not yet built
-Pulls recent high-severity Sentinel incidents via the API and generates a plain-text summary report — incident count by severity, top affected accounts, oldest unresolved incident.
+Authenticates to Azure Resource Manager (a separate API surface from Microsoft Graph, with a different authorization model — see Authentication below) and pulls recent Sentinel incidents directly from the Log Analytics workspace. Generates a summary report: incident count by severity, and a breakdown by detection type (Brute Force, Impossible Travel Detection).
 
 **Security benefit:** a lightweight reporting layer on top of Sentinel, useful for a quick status check without opening the full portal dashboard.
 
@@ -46,23 +46,31 @@ Pulls recent high-severity Sentinel incidents via the API and generates a plain-
 
 ## 🔐 Authentication
 
-All scripts authenticate to Microsoft Graph / Azure using an app registration with least-privilege API permissions scoped to read-only access — no script in this repo writes to or modifies tenant data.
+This toolkit uses **two different Azure authorization models**, since it spans two different API surfaces:
 
-**Application permissions required:**
+**Microsoft Graph** (`mfa_stale_role_audit.py`, `ca_policy_export.py`) — authorized via **API permissions** granted directly to the Entra ID app registration:
 - `User.Read.All` — for `mfa_stale_role_audit.py`
 - `UserAuthenticationMethod.Read.All` — for `mfa_stale_role_audit.py`
 - `RoleManagement.Read.Directory` — for `mfa_stale_role_audit.py`
 - `AuditLog.Read.All` — for `mfa_stale_role_audit.py`; added after an initial `403` error revealed this was required for the MFA authentication-methods endpoint, beyond what `UserAuthenticationMethod.Read.All` alone covers
 - `Policy.Read.All` — for `ca_policy_export.py`
 
-Admin consent must be granted for all five in the Entra ID app registration before the script will run successfully.
+Admin consent must be granted for all five in the Entra ID app registration before these two scripts will run successfully.
+
+**Azure Resource Manager** (`sentinel_incident_summary.py`) — authorized via **Azure RBAC**, assigned directly on the resource rather than as an API permission on the app registration:
+
+- The app registration's service principal is granted the **Microsoft Sentinel Reader** role, scoped to the Log Analytics workspace hosting Sentinel.
+- No API permissions in the app registration blade are needed for this script — RBAC on the resource is the entire authorization mechanism.
+
+No script in this repo writes to or modifies tenant data — every permission and role used is read-only.
 
 ## ⚙️ Setup
 
 1. Create an app registration in Entra ID, add the five permissions above, and grant admin consent. >> See example here:[API permissions](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/Security%20Automation%20Toolkit%20-%20API%20Permissions.PNG)
 2. Generate a client secret and copy its value immediately (shown only once).
-3. Copy [config.example.json](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/config.example.json) to a new file named `config.json` in the project root, and fill in your real tenant ID, client ID, and client secret.
-4. `config.json` is listed in `.gitignore` and will never be committed to this repo — it should only ever exist locally.
+3. For `sentinel_incident_summary.py`: on your Log Analytics workspace, go to **Access control (IAM) → Add role assignment**, and assign **Microsoft Sentinel Reader** to the app registration's service principal.
+4. Copy [config.example.json](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/config.example.json) to a new file named `config.json` in the project root, and fill in your real tenant ID, client ID, client secret, subscription ID, resource group name, and Log Analytics workspace name.
+5. `config.json` is listed in `.gitignore` and will never be committed to this repo — it should only ever exist locally.
 
 ---
 
@@ -80,6 +88,8 @@ Each script expects a `config.json` (not committed) with your tenant ID, app reg
 
 - Practical scripting ability beyond point-and-click portal work
 - Comfort with the Microsoft Graph API and OAuth-based authentication
+- Working across two distinct Azure authorization models — Graph API permissions vs. Azure RBAC on a resource — and understanding when each applies
 - Applying the same governance mindset from my IAM/SIEM projects, just via code instead of Azure-native automation
+- Using scripted output to surface a real operational issue (alert-fatigue-scale rule noise) that's easy to miss reviewing incidents one at a time in the portal
 
 ---
