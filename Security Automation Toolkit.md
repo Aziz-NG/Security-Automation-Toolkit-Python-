@@ -37,8 +37,10 @@ Authenticates to Microsoft Graph and exports all Conditional Access policies int
 
 **Security benefit:** makes periodic CA policy review actually practical — this is the kind of governance task that gets skipped when it requires manually opening a dozen policies in a UI.
 
-### 3. `sentinel-incident-summary.py` 
+### 3. [sentinel-incident-summary.py](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/sentinel_incident_summary.py) ✅ Built
 Authenticates to Azure Resource Manager (a separate API surface from Microsoft Graph, with a different authorization model — see Authentication below) and pulls recent Sentinel incidents directly from the Log Analytics workspace. Generates a summary report: incident count by severity, and a breakdown by detection type (Brute Force, Impossible Travel Detection).
+
+[sentinel incident summary.csv](https://github.com/Aziz-NG/Security-Automation-Toolkit-Python-/blob/main/repo/sentinel_incident_summary.csv)
 
 **Security benefit:** a lightweight reporting layer on top of Sentinel, useful for a quick status check without opening the full portal dashboard.
 
