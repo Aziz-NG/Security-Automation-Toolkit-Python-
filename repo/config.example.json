@@ -1,8 +1,8 @@
 {
-  "tenant_id": "your-directory-tenant-id-here",
-  "client_id": "your-application-client-id-here",
-  "client_secret": "your-client-secret-value-here"
-  "subscription_id": "your-subscription-id-here",
-  "resource_group": "your-resource-group-name-here",
-  "workspace_name": "your-log-analytics-workspace-name-here"
+  "tenant_id": "directory-tenant-id",
+  "client_id": "application-client-id",
+  "client_secret": "client-secret-value"
+  "subscription_id": "subscription-id",
+  "resource_group": "resource-group-name",
+  "workspace_name": "log-analytics-workspace-name"
 }
